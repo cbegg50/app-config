@@ -1,0 +1,76 @@
+2016-06-05 18:24:48 Notice: Notice (8): Undefined variable: dhcp_reservatins in [/home/pi/hsmm-pi/src/var/www/hsmm-pi/Controller/NetworkSettingsController.php, line 21]
+Trace:
+NetworkSettingsController::edit() - APP/Controller/NetworkSettingsController.php, line 21
+ReflectionMethod::invokeArgs() - [internal], line ??
+Controller::invokeAction() - CORE/Cake/Controller/Controller.php, line 491
+Dispatcher::_invoke() - CORE/Cake/Routing/Dispatcher.php, line 193
+Dispatcher::dispatch() - CORE/Cake/Routing/Dispatcher.php, line 167
+[main] - APP/webroot/index.php, line 110
+
+2016-06-05 18:24:48 Notice: Notice (8): Undefined variable: olsrd_dhcp_reservations in [/home/pi/hsmm-pi/src/var/www/hsmm-pi/Controller/AppController.php, line 295]
+Trace:
+AppController::render_olsrd_config() - APP/Controller/AppController.php, line 295
+NetworkSettingsController::edit() - APP/Controller/NetworkSettingsController.php, line 21
+ReflectionMethod::invokeArgs() - [internal], line ??
+Controller::invokeAction() - CORE/Cake/Controller/Controller.php, line 491
+Dispatcher::_invoke() - CORE/Cake/Routing/Dispatcher.php, line 193
+Dispatcher::dispatch() - CORE/Cake/Routing/Dispatcher.php, line 167
+[main] - APP/webroot/index.php, line 110
+
+2016-06-05 18:27:57 Notice: Notice (8): Undefined variable: dhcp_reservatins in [/home/pi/hsmm-pi/src/var/www/hsmm-pi/Controller/NetworkSettingsController.php, line 21]
+Trace:
+NetworkSettingsController::edit() - APP/Controller/NetworkSettingsController.php, line 21
+ReflectionMethod::invokeArgs() - [internal], line ??
+Controller::invokeAction() - CORE/Cake/Controller/Controller.php, line 491
+Dispatcher::_invoke() - CORE/Cake/Routing/Dispatcher.php, line 193
+Dispatcher::dispatch() - CORE/Cake/Routing/Dispatcher.php, line 167
+[main] - APP/webroot/index.php, line 110
+
+2016-06-05 18:27:57 Notice: Notice (8): Undefined variable: olsrd_dhcp_reservations in [/home/pi/hsmm-pi/src/var/www/hsmm-pi/Controller/AppController.php, line 295]
+Trace:
+AppController::render_olsrd_config() - APP/Controller/AppController.php, line 295
+NetworkSettingsController::edit() - APP/Controller/NetworkSettingsController.php, line 21
+ReflectionMethod::invokeArgs() - [internal], line ??
+Controller::invokeAction() - CORE/Cake/Controller/Controller.php, line 491
+Dispatcher::_invoke() - CORE/Cake/Routing/Dispatcher.php, line 193
+Dispatcher::dispatch() - CORE/Cake/Routing/Dispatcher.php, line 167
+[main] - APP/webroot/index.php, line 110
+
+2016-06-05 20:50:58 Notice: Notice (8): Undefined variable: dhcp_reservatins in [/home/pi/hsmm-pi/src/var/www/hsmm-pi/Controller/NetworkSettingsController.php, line 21]
+Trace:
+NetworkSettingsController::edit() - APP/Controller/NetworkSettingsController.php, line 21
+ReflectionMethod::invokeArgs() - [internal], line ??
+Controller::invokeAction() - CORE/Cake/Controller/Controller.php, line 491
+Dispatcher::_invoke() - CORE/Cake/Routing/Dispatcher.php, line 193
+Dispatcher::dispatch() - CORE/Cake/Routing/Dispatcher.php, line 167
+[main] - APP/webroot/index.php, line 110
+
+2016-06-05 20:50:58 Notice: Notice (8): Undefined variable: olsrd_dhcp_reservations in [/home/pi/hsmm-pi/src/var/www/hsmm-pi/Controller/AppController.php, line 295]
+Trace:
+AppController::render_olsrd_config() - APP/Controller/AppController.php, line 295
+NetworkSettingsController::edit() - APP/Controller/NetworkSettingsController.php, line 21
+ReflectionMethod::invokeArgs() - [internal], line ??
+Controller::invokeAction() - CORE/Cake/Controller/Controller.php, line 491
+Dispatcher::_invoke() - CORE/Cake/Routing/Dispatcher.php, line 193
+Dispatcher::dispatch() - CORE/Cake/Routing/Dispatcher.php, line 167
+[main] - APP/webroot/index.php, line 110
+
+2016-06-05 21:18:59 Notice: Notice (8): Undefined variable: dhcp_reservatins in [/home/pi/hsmm-pi/src/var/www/hsmm-pi/Controller/NetworkSettingsController.php, line 21]
+Trace:
+NetworkSettingsController::edit() - APP/Controller/NetworkSettingsController.php, line 21
+ReflectionMethod::invokeArgs() - [internal], line ??
+Controller::invokeAction() - CORE/Cake/Controller/Controller.php, line 491
+Dispatcher::_invoke() - CORE/Cake/Routing/Dispatcher.php, line 193
+Dispatcher::dispatch() - CORE/Cake/Routing/Dispatcher.php, line 167
+[main] - APP/webroot/index.php, line 110
+
+2016-06-05 21:18:59 Notice: Notice (8): Undefined variable: olsrd_dhcp_reservations in [/home/pi/hsmm-pi/src/var/www/hsmm-pi/Controller/AppController.php, line 295]
+Trace:
+AppController::render_olsrd_config() - APP/Controller/AppController.php, line 295
+NetworkSettingsController::edit() - APP/Controller/NetworkSettingsController.php, line 21
+ReflectionMethod::invokeArgs() - [internal], line ??
+Controller::invokeAction() - CORE/Cake/Controller/Controller.php, line 491
+Dispatcher::_invoke() - CORE/Cake/Routing/Dispatcher.php, line 193
+Dispatcher::dispatch() - CORE/Cake/Routing/Dispatcher.php, line 167
+[main] - APP/webroot/index.php, line 110
+
