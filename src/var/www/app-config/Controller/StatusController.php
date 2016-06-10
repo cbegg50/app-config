@@ -8,15 +8,6 @@ class StatusController extends AppController {
 	}
 
 
-        private function render_email_config($email_setting) {
-                $postfix_conf = file_get_contents(WWW_ROOT . "/files/main.cf.template");
-                $postfix_conf_output = str_replace(array('{hostname}', '{domain}'),
-						array($email_setting['EmailSetting']['hostname'],
-							$email_setting['EmailSetting']['domain']), 
-						$postfix_conf);
-
-                file_put_contents('/etc/postfix/main.cf', $postfix_conf_output);
-        }
 	public function index($id = 0) {
 		$this->load_email_attributes();
                 $current_hostname = file_get_contents("/etc/hostname");
@@ -36,13 +27,23 @@ class StatusController extends AppController {
 	'id' => 1,
         'hostname' => $current_hostname,
         'domain' => $current_domain))) {
-				$this->render_email_config($email_setting);
+				$this->render_email_config($this->get_email_settings());
 				exec('sudo /usr/sbin/service postfix reload');
-//				exec('sudo /usr/sbin/service dovecot reload');
+				exec('sudo /usr/sbin/service dovecot reload');
 				$this->redirect(array('action' => 'index'));
 			}
 		}
 	}
+
+        private function render_email_config($email_setting) {
+                $postfix_conf = file_get_contents(WWW_ROOT . "/files/main.cf.template");
+                $postfix_conf_output = str_replace(array('{myhostname}', '{mydomain}'),
+						array($email_setting['EmailSetting']['hostname'],
+							$email_setting['EmailSetting']['domain']), 
+						$postfix_conf);
+
+                file_put_contents('/etc/postfix/main.cf', $postfix_conf_output);
+        }
 
 	function startsWith($haystack, $needle) {
 		return !strncmp($haystack, $needle, strlen($needle));

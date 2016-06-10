@@ -33,19 +33,8 @@
 
       <table class="table table-striped table-bordered">
   <tr>
-    <th>Email Host (db)</th>
-    <th>Email Domain (db)</th>
-    <th>Email Host (now)</th>
-    <th>Email Domain (now)</th>
-  </tr>
-  <tr>
-    <td><?php echo $hostname ; ?>
-    </td>
-    <td><?php echo $domain ; ?>
-    </td>
-    <td><?php echo $current_hostname ; ?>
-    </td>
-    <td><?php echo $current_domain ; ?>
+    <th>Email Server</th>
+    <td><?php echo $hostname . '.' . $domain ; ?>
     </td>
   </tr>
       </table>
