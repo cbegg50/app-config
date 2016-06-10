@@ -1,9 +1,0 @@
-2016-06-07 23:03:00 Error: [MissingControllerException] Controller class NetworkSettingController could not be found.
-Exception Attributes: array (
-  'class' => 'NetworkSettingController',
-  'plugin' => NULL,
-)
-Request URL: /hsmm-pi/NetworkSetting/index
-Stack Trace:
-#0 /home/pi/hsmm-pi/src/var/www/hsmm-pi/webroot/index.php(110): Dispatcher->dispatch(Object(CakeRequest), Object(CakeResponse))
-#1 {main}
