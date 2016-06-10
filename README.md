@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 HSMM-Pi
 =======
 
@@ -171,3 +172,7 @@ FAQ
 ====
 
 A list of frequently asked questions can be found on [our wiki](https://github.com/urlgrey/hsmm-pi/wiki), at the [FAQ page](https://github.com/urlgrey/hsmm-pi/wiki/FAQ).
+=======
+# app-config
+Web application to configure a Broadband Hamnet mesh application server
+>>>>>>> f73f19f53d203aaa75e26e10ec8dc01a7278499a
