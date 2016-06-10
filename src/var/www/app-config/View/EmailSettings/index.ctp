@@ -1,40 +1,24 @@
 <!-- File: /app/View/DhcpReservations/index.ctp -->
 <div class="page-header">
-  <h1>DHCP Reservations</h1>
+  <h1>Email Settings</h1>
 </div>
 
 <div class="row">
   <div class="col-md-12">
       <?php
-if ($dhcp_reservations != NULL && sizeof($dhcp_reservations) > 0) {
+if ($email_settings != NULL && sizeof($email_settings) > 0) {
 	?>
       <table class="table table-striped table-bordered">
 	<tr>
 	  <th>Hostame</th>
-	  <th>IP Address</th>
-	  <th>MAC Address</th>
-	  <th>Actions</th>
+	  <th>Domain</th>
 	</tr>
-	<?php
-foreach ($dhcp_reservations as $dhcp_reservation) {
-		?>
 	<tr>
-	  <td><?php echo $dhcp_reservation['DhcpReservation']['hostname'];?></td>
-	  <td><?php echo $dhcp_reservation['DhcpReservation']['ip_address'];?></td>
-	  <td><?php echo $dhcp_reservation['DhcpReservation']['mac_address'];?></td>
-	  <td>
-	        <?php
-echo $this->Html->link('', array(
-			'action' => 'delete',
-			$dhcp_reservation['DhcpReservation']['id'],
-		),
-			array('class' => 'glyphicon glyphicon-trash'));
-		?>
-	  </td>
+sed -i "s/cn-myhostname/$MYHOSTNAME.$MYDOMAIN/g" "$EMAILPATH"
+sed -i "s/cn-domain/$MYDOMAIN/g" "$EMAILPATH"
+	  <td><?php echo $email_setting['EmailSetting']['hostname'];?></td>
+	  <td><?php echo $email_setting['EmailSetting']['domain'];?></td>
 	</tr>
-	<?php
-}
-	?>
 </table>
 </div>
 </div>
@@ -42,7 +26,7 @@ echo $this->Html->link('', array(
 } else {
 	?>
       <div class="alert alert-info">
-      	   No addresses have been reserved.
+      	   No email settings found.
       </div>
       <?php 
 	}

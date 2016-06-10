@@ -1,135 +1,47 @@
 <?php
 class StatusController extends AppController {
-	public $components = array('RequestHandler');
+        public $components = array('Flash', 'RequestHandler');
 
 	public function beforeFilter() {
 		parent::beforeFilter();
 		$this->Auth->allow('index');
 	}
 
-	public function index() {
-		$this->set('mesh_links', $this->get_mesh_info('links'));
-		$this->set('mesh_routes', $this->get_mesh_info('routes')['routes']);
-		$this->set('mesh_hosts', $this->get_mesh_hosts());
-		$this->set('mesh_services', $this->get_mesh_services());
-		$this->set('mesh_node_locations', $this->get_mesh_node_locations());
-		$this->load_node_attributes();
 
-		$neighbors = array();
-		foreach ($this->get_mesh_info('neighbors')['neighbors'] as $node) {
-			$neighbors[] = $node['ipv4Address'];
-		}
-		$this->set('mesh_neighbors', $neighbors);
+        private function render_email_config($email_setting) {
+                $postfix_conf = file_get_contents(WWW_ROOT . "/files/main.cf.template");
+                $postfix_conf_output = str_replace(array('{hostname}', '{domain}'),
+						array($email_setting['EmailSetting']['hostname'],
+							$email_setting['EmailSetting']['domain']), 
+						$postfix_conf);
 
-		$location = $this->get_location();
-		$this->set('maps_api_key', $location['LocationSetting']['maps_api_key']);
-	}
+                file_put_contents('/etc/postfix/main.cf', $postfix_conf_output);
+        }
+	public function index($id = 0) {
+		$this->load_email_attributes();
+                $current_hostname = file_get_contents("/etc/hostname");
+                $this->set('current_hostname', $current_hostname);
+                $dnsmasq = file_get_contents("/etc/dnsmasq.d/hsmm-pi.conf");
+                $current_domain = strstr($dnsmasq, "domain=");  // includes rest of file
+                $current_domain = strtok($current_domain, "=\n");
+                $current_domain = strtok("\n");
+                $this->set('current_domain', $current_domain);
+		$email_setting = $this->get_email_settings();
 
-	private function get_mesh_info($info_type) {
-		$socket = null;
-		try {
-			$socket = socket_create(AF_INET, SOCK_STREAM, SOL_TCP);
-			if ($socket === false) {
-				socket_clear_error($socket);
-				return null;
-			}
-
-			$result = socket_connect($socket, "127.0.0.1", 9090);
-			if ($result === false) {
-				socket_clear_error($socket);
-				return null;
-			}
-
-			$input = "GET /$info_type HTTP/1.1\r\n";
-			$output = '';
-
-			socket_write($socket, $input, strlen($input));
-			while ($buffer = socket_read($socket, 2048)) {
-				$output .= $buffer;
-			}
-			socket_close($socket);
-			return json_decode($output, true);
-		} catch (Exception $e) {
-			socket_clear_error($socket);
-			return null;
-		}
-	}
-
-	private function get_mesh_hosts() {
-		$hosts = array();
-		if (file_exists("/var/run/hosts_olsr")) {
-			$handle = @fopen("/var/run/hosts_olsr", "r");
-			if ($handle) {
-				while (($buffer = fgets($handle, 1024)) !== false) {
-					if ($buffer != null) {
-						$host_s = trim(substr($buffer, 0, strpos($buffer, '#')));
-						if (strlen($host_s) > 0) {
-							$host_parts = explode("\t", $host_s);
-							if (sizeof($host_parts) >= 2) {
-								$ip = $host_parts[0];
-								$name = $host_parts[1];
-								if (!array_key_exists($ip, $hosts)) {
-									$hosts[$ip] = $name;
-								}
-							}
-						}
-					}
-				}
-				fclose($handle);
+		// Have they changed?
+		if ((0 != strcmp($current_hostname, $email_setting['EmailSetting']['hostname']))
+		 || (0 != strcmp($current_domain, $email_setting['EmailSetting']['domain'])))  {
+			$this->Flash->success(__('Difference(s) found, reloading Postfix.'));
+	                if ($this->EmailSetting->save(array(
+	'id' => 1,
+        'hostname' => $current_hostname,
+        'domain' => $current_domain))) {
+				$this->render_email_config($email_setting);
+				exec('sudo /usr/sbin/service postfix reload');
+//				exec('sudo /usr/sbin/service dovecot reload');
+				$this->redirect(array('action' => 'index'));
 			}
 		}
-
-		return $hosts;
-	}
-
-	private function get_mesh_services() {
-		$services = array();
-		if (file_exists("/var/run/services_olsr")) {
-			$handle = @fopen("/var/run/services_olsr", "r");
-			if ($handle) {
-				while (($buffer = fgets($handle, 1024)) !== false) {
-					if ($buffer != null) {
-						$service_s = trim(substr($buffer, 0, strpos($buffer, '#')));
-						if (strlen($service_s) > 0) {
-							$service_parts = explode('|', $service_s);
-							if (sizeof($service_parts) > 0) {
-								$services[] = $service_parts;
-							}
-						}
-					}
-				}
-				fclose($handle);
-			}
-		}
-
-		return $services;
-	}
-
-	private function get_mesh_node_locations() {
-		$locations = array();
-		if (file_exists("/var/run/latlon.js")) {
-			$handle = @fopen("/var/run/latlon.js", "r");
-			if ($handle) {
-				while (($buffer = fgets($handle, 1024)) !== false) {
-					if ($buffer != null) {
-						if ((false != strstr($buffer, 'Self(')) || (false != strstr($buffer, 'Node('))) {
-							// found a line with coordinates, handle it, and remove apostrophes
-							$trimmed_node_str = str_replace('\'', '', substr($buffer, 5, -3));
-							$location_parts = explode(',', $trimmed_node_str);
-							if (sizeof($location_parts) > 0 &&
-								!((floatval($location_parts[1]) == 0.0) && (floatval($location_parts[2] == 0.0)))
-							) {
-								// set the lat/long in the returned array using the host IP for the array index
-								$locations[$location_parts[0]] = array('lat' => $location_parts[1], 'lon' => $location_parts[2]);
-							}
-						}
-					}
-				}
-				fclose($handle);
-			}
-		}
-
-		return $locations;
 	}
 
 	function startsWith($haystack, $needle) {

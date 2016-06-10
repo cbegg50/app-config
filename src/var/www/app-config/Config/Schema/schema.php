@@ -14,18 +14,21 @@ class AppSchema extends CakeSchema {
 
 		if (isset($event['create'])) {
 			switch ($event['create']) {
-				case 'location_settings':
-					$location_setting = ClassRegistry::init('LocationSetting');
-					$location_setting->create();
-					$location_setting->save();
-					break;
 				case 'network_settings':
 					$network_setting = ClassRegistry::init('NetworkSetting');
 					$network_setting->create();
-					$network_setting->save(
+					$network_setting->save();
+//						array(
+//						)
+//					);
+					break;
+				case 'email_settings':
+					$email_setting = ClassRegistry::init('EmailSetting');
+					$email_setting->create();
+					$email_setting->save(
 						array(
-							'wan_mesh_gateway' => true,
-							'mesh_olsrd_secure_key' => 'FFFFFFFFFFFFFFFF'
+			'hostname' => 'db-hostname',
+			'domain' => 'db-domain'
 						)
 					);
 					break;
@@ -45,45 +48,6 @@ class AppSchema extends CakeSchema {
 			}
 		}
 	}
-
-	public $location_settings = array(
-		'id' => array('type' => 'integer', 'null' => false, 'length' => 11, 'key' => 'primary'),
-		'transmit_location_enabled' => array('type' => 'boolean', 'null' => false, 'default' => false),
-		'location_source' => array('type' => 'string', 'null' => false, 'default' => 'fixed'),
-		'lat' => array('type' => 'float', 'null' => false, 'default' => '0.0'),
-		'lon' => array('type' => 'float', 'null' => false, 'default' => '0.0'),
-		'gps_device_name' => array('type' => 'string', 'null' => false, 'default' => 'gps0'),
-		'maps_api_key' => array('type' => 'string', 'null' => true),
-		'indexes' => array(
-			'PRIMARY' => array('column' => 'id', 'unique' => true)
-		),
-		'tableParameters' => array()
-	);
-
-	public $network_services = array(
-		'id' => array('type' => 'integer', 'null' => false, 'length' => 11, 'key' => 'primary'),
-		'name' => array('type' => 'string', 'null' => false),
-		'host' => array('type' => 'string', 'null' => false, 'default' => 'null'),
-		'port' => array('type' => 'integer', 'null' => false),
-		'path' => array('type' => 'string', 'null' => false, 'default' => ''),
-		'protocol' => array('type' => 'string', 'null' => false, 'default' => 'tcp'),
-		'local_port' => array('type' => 'integer', 'null' => false),
-		'service_protocol_name' => array('type' => 'string', 'null' => false, 'default' => 'http'),
-		'indexes' => array(
-			'PRIMARY' => array('column' => 'id', 'unique' => true)
-		),
-		'tableParameters' => array()
-	);
-	public $dhcp_reservations = array(
-		'id' => array('type' => 'integer', 'null' => false, 'length' => 11, 'key' => 'primary'),
-		'hostname' => array('type' => 'string', 'null' => false),
-		'ip_address' => array('type' => 'string', 'null' => true),
-		'mac_address' => array('type' => 'string', 'null' => false, 'default' => ''),
-		'indexes' => array(
-			'PRIMARY' => array('column' => 'id', 'unique' => true)
-		),
-		'tableParameters' => array()
-	);
 
 	public $network_settings = array(
 		'id' => array('type' => 'integer', 'null' => false, 'length' => 11, 'key' => 'primary'),
@@ -121,11 +85,22 @@ class AppSchema extends CakeSchema {
 		'tableParameters' => array()
 	);
 
+	public $email_settings = array(
+		'id' => array('type' => 'integer', 'null' => false, 'length' => 11, 'key' => 'primary'),
+		'hostname' => array('type' => 'string', 'null' => true, 'length' => 50),
+		'domain' => array('type' => 'string', 'null' => true, 'length' => 50),
+		'indexes' => array(
+			'PRIMARY' => array('column' => 'id', 'unique' => true)
+		),
+		'tableParameters' => array()
+	);
+
 	public $users = array(
 		'id' => array('type' => 'integer', 'null' => false, 'length' => 11, 'key' => 'primary'),
 		'username' => array('type' => 'string', 'null' => false, 'length' => 50),
 		'password' => array('type' => 'string', 'null' => false, 'length' => 50),
 		'role' => array('type' => 'string', 'null' => true, 'length' => 20),
+		'has_email' => array('type' => 'boolean', 'null' => false, 'default' => true),
 		'created' => array('type' => 'datetime', 'null' => true, 'default' => null),
 		'modified' => array('type' => 'datetime', 'null' => true, 'default' => null),
 		'indexes' => array(

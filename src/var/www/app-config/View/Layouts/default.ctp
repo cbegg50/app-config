@@ -17,7 +17,7 @@
  * @license       http://www.opensource.org/licenses/mit-license.php MIT License
  */
 
-$cakeDescription = __d('cake_dev', __('HSMM-Pi'));
+$cakeDescription = __d('cake_dev', __('app-config'));
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -102,33 +102,24 @@ $cakeDescription = __d('cake_dev', __('HSMM-Pi'));
           <span class="icon-bar"></span>
           <span class="icon-bar"></span>
         </button>
-        <div class="navbar-brand"><?php echo __('HSMM-Pi'); ?></div>
+        <div class="navbar-brand"><?php echo __('App Config'); ?></div>
       </div>
       <div class="navbar-collapse collapse">
         <ul class="nav navbar-nav">
-          <li <?php if (strstr($this->here, '/hsmm-pi/status') != FALSE) { echo 'class="active"'; }  ?>>
+          <li <?php if (strstr($this->here, '/app-config/status') != FALSE) { echo 'class="active"'; }  ?>>
             <?php
               echo $this->Html->link(__('Status'), array(
                                                         'controller' => 'status',
                                                         'action' => 'index'));
             ?>
           </li>
-          <?php if ((0 == strcmp($this->here, '/hsmm-pi/')) || 
-		    (strstr($this->here, '/hsmm-pi/status') != FALSE)) { 
-			echo '<li>';
-			echo $this->Html->link(__('OLSR'), 
-				'http://' . $node_name . ':1978/', 
-				array('target' => '_blank'));
-          		echo '</li>';
-		}
-	  ?>
           <?php
              if ($this->Session->read('Auth.User')) {
           ?>
           <li class="dropdown">
             <a href="#" class="dropdown-toggle" data-toggle="dropdown">Admin <b class="caret"></b></a>
           <ul class="dropdown-menu">
-          <li <?php if (strstr($this->here, '/hsmm-pi/network_settings') != FALSE) { echo 'class="active"'; }  ?>>
+          <li <?php if (strstr($this->here, '/app-config/network_settings') != FALSE) { echo 'class="active"'; }  ?>>
             <?php
               echo $this->Html->link(__("<i class=\"glyphicon glyphicon-signal\"></i>&nbsp;".'Network'),
                                      array(
@@ -137,11 +128,11 @@ $cakeDescription = __d('cake_dev', __('HSMM-Pi'));
                                      array('escape' => false));
             ?>
           </li>
-          <li <?php if (strstr($this->here, '/hsmm-pi/dhcp_reservations') != FALSE) { echo 'class="active"'; }  ?>>
+          <li <?php if (strstr($this->here, '/app-config/email_settings') != FALSE) { echo 'class="active"'; }  ?>>
             <?php
-              echo $this->Html->link(__("<i class=\"glyphicon glyphicon-signal\"></i>&nbsp;".'Reservations'),
+              echo $this->Html->link(__("<i class=\"glyphicon glyphicon-signal\"></i>&nbsp;".'Email Settings'),
                                      array(
-                                           'controller' => 'dhcp_reservations',
+                                           'controller' => 'email_settings',
                                            'action' => 'index'),
                                      array('escape' => false));
             ?>
@@ -164,23 +155,13 @@ $cakeDescription = __d('cake_dev', __('HSMM-Pi'));
                                      array('escape' => false));
              ?>
           </li>
-          <li <?php if (strstr($this->here, '/hsmm-pi/user') != FALSE) { echo 'class="active"'; }  ?>>
+          <li <?php if (strstr($this->here, '/app-config/user') != FALSE) { echo 'class="active"'; }  ?>>
             <?php
-              echo $this->Html->link("<i class=\"glyphicon glyphicon-user\"></i>&nbsp;".__('Account'),
+              echo $this->Html->link("<i class=\"glyphicon glyphicon-user\"></i>&nbsp;".__('Accounts'),
                                     array(
                                           'controller' => 'users',
                                           'action' => 'edit'),
                                     array('escape' => false));
-            ?>
-          </li>
-          <li class="divider"></li>
-          <li <?php if (strstr($this->here, '/hsmm-pi/wifi_scan') != FALSE) { echo 'class="active"'; }  ?>>
-            <?php
-               echo $this->Html->link("<i class=\"glyphicon glyphicon-search\"></i>&nbsp;".__('WiFi Scan'),
-                                      array(
-                                            'controller' => 'wifi_scan',
-                                            'action' => 'index'),
-                                      array('escape' => false));
             ?>
           </li>
           <li class="divider"></li>

@@ -4,7 +4,7 @@
 # File: install.sh
 # Authors: Scott Kidder, Clayton Smith, Colin Begg
 # Purpose: This script will configure a newly-imaged Raspberry Pi running
-#   Raspbian Jessie Lite with the dependencies and HSMM-Pi components.
+#   Raspbian Jessie Lite with the dependencies and appserver components.
 #
 
 if [ "$(id -u)" = "0" ]
@@ -27,7 +27,10 @@ sudo apt-get install -y \
     php-pear \
     php5-sqlite  \
     sysv-rc-conf \
-    php5-mcrypt
+    php5-mcrypt \
+    postfix \
+    dovecot-common \
+    dovecot-imapd
 
 # Enabe php5-mcrypt
 sudo php5enmod mcrypt
@@ -79,11 +82,26 @@ mkdir -p tmp/persistent
 sudo chgrp -R www-data tmp
 sudo chmod -R 775 tmp
 
+# Extensively modified GM4WZG 10 Feb 2015 
+# Revision 1.1
+# Email setup script
+#
+
+EMAILPATH=/etc/postfix/main.cf
+sudo touch "$EMAILPATH"
+sudo chmod 644 "$EMAILPATH"
+sudo maildirmake.dovecot /etc/skel/Maildir
+sudo maildirmake.dovecot /etc/skel/Maildir/.Drafts
+sudo maildirmake.dovecot /etc/skel/Maildir/.Sent
+sudo maildirmake.dovecot /etc/skel/Maildir/.Spam
+sudo maildirmake.dovecot /etc/skel/Maildir/.Trash
+sudo maildirmake.dovecot /etc/skel/Maildir/.Templates
+
 # Set permissions on system files to give www-data group write priv's
-#for file in /etc/hosts /etc/hostname /etc/resolv.conf /etc/network/interfaces /etc/rc.local /etc/ntp.conf /etc/default/gpsd /etc/dhcp/dhclient.conf /etc/ethers; do
-#    sudo chgrp www-data ${file}
-#    sudo chmod g+w ${file}
-#done
+for file in /etc/postfix/main.cf; do
+    sudo chgrp www-data ${file}
+    sudo chmod g+w ${file}
+done
 
 #sudo chgrp www-data /etc/dnsmasq.d
 #sudo chmod 775 /etc/dnsmasq.d
