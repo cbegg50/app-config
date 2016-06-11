@@ -16,7 +16,7 @@ PROJECT_HOME=${HOME}/app-config
 
 # Pull in the udpate from GitHub
 cd ${PROJECT_HOME}
-#git pull origin master
+git pull origin master
 
 # Set symlink to webapp
 if [ -d /var/www/html ]; then
@@ -39,7 +39,7 @@ sudo chgrp -R www-data tmp
 sudo chmod -R 775 tmp
 
 # Remove old database
-sudo rm -rf /var/data
+sudo rm -rf /var/data/app-config
 # Create database
 sudo mkdir -p /var/data/app-config
 sudo chown root.www-data /var/data/app-config
