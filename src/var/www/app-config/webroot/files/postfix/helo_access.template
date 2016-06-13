@@ -1,0 +1,3 @@
+{myhostname}.{mydomain}	REJECT	Get lost - you're lying about who you are
+mail.{myhostname}.{mydomain}	REJECT	Get lost - you're lying about who you are
+

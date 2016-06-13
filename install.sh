@@ -30,7 +30,8 @@ sudo apt-get install -y \
     php5-mcrypt \
     postfix \
     dovecot-common \
-    dovecot-imapd
+    dovecot-imapd \
+    squirrelmail
 
 # Enabe php5-mcrypt
 sudo php5enmod mcrypt
@@ -98,13 +99,10 @@ sudo maildirmake.dovecot /etc/skel/Maildir/.Trash
 sudo maildirmake.dovecot /etc/skel/Maildir/.Templates
 
 # Set permissions on system files to give www-data group write priv's
-for file in /etc/postfix/main.cf; do
+for file in /etc/postfix/main.cf /etc/postfix/helo_access; do
     sudo chgrp www-data ${file}
     sudo chmod g+w ${file}
 done
-
-#sudo chgrp www-data /etc/dnsmasq.d
-#sudo chmod 775 /etc/dnsmasq.d
 
 sudo mkdir -p /var/data/app-config
 sudo chown root.www-data /var/data/app-config
@@ -114,16 +112,25 @@ if [ ! -e /var/data/app-config/app-config.sqlite ]; then
     sudo chown root.www-data /var/data/app-config/app-config.sqlite
     sudo chmod 664 /var/data/app-config/app-config.sqlite
 fi
-
-# enable apache mod-rewrite
+# enable apache mod-rewrite and ssl
 sudo a2enmod rewrite
+sudo a2enmod ssl
+sudo a2ensite default-ssl
+
 if [ -d /etc/apache2/conf.d ]; then
     sudo cp ${PROJECT_HOME}/src/etc/apache2/conf.d/app-config.conf /etc/apache2/conf.d/app-config.conf
+    sudo cp ${PROJECT_HOME}/src/etc/apache2/conf.d/squirrelmail.conf /etc/apache2/conf.d/squirrelmail.conf
 elif [ -d /etc/apache2/conf-available ]; then
     sudo cp ${PROJECT_HOME}/src/etc/apache2/conf-available/app-config.conf /etc/apache2/conf-available/app-config.conf
+    sudo cp ${PROJECT_HOME}/src/etc/apache2/conf-available/squirrelmail.conf /etc/apache2/conf-available/squirrelmail.conf
     sudo a2enconf app-config
+    sudo a2enconf squirrelmail
 fi
 sudo service apache2 restart
+
+# install mail files
+sudo cp  ${PROJECT_HOME}/src/etc/postfix/master.cf /etc/postfix
+sudo cp -r  ${PROJECT_HOME}/src/etc/dovecot/* /etc/dovecot
 
 # enable services
 #sudo sysv-rc-conf --level 2345 olsrd on
