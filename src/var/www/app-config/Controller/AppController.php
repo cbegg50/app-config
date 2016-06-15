@@ -1,3 +1,4 @@
+
 <?php
 /**
  * Application level Controller
@@ -25,15 +26,29 @@ App::uses('Controller', 'Controller');
 
 class AppController extends Controller {
 
-	public $components = array('Session',
+	public $components = array(
+		'Session',
 		'Auth' => array('loginRedirect' => array('controller' => 'status',
 			'action' => 'index'),
 			'logoutRedirect' => array('controller' => 'status',
-				'action' => 'index')));
+				'action' => 'index'),
+			'authorize' => array('Controller')
+			)
+		);
+
+	public function isAuthorized($user) {
+		// admin can access every action
+		if (isset($user['role']) && $user['role'] === 'admin') {
+			return true;
+		}
+		// Default deny
+		return false;
+	}
 
 	protected function load_email_attributes() {
 		$this->loadModel('EmailSetting');
 		$settings = $this->EmailSetting->findById(1);
+		$this->set('user_id', AuthComponent::user('id'));
 		$this->set('hostname', $settings['EmailSetting']['hostname']);
 		$this->set('domain', $settings['EmailSetting']['domain']);
 	}
@@ -43,22 +58,9 @@ class AppController extends Controller {
 		return $this->EmailSetting->findById(1);
 	}
 
-	// Output dhcp reservations to /etc/ethers
-	protected function render_ethers($dhcp_reservations) {
-/*
-		$ethers = file_get_contents(WWW_ROOT . "/files/ethers.template");
-		$ethers_output = null;
-        	foreach ($dhcp_reservations as $dhcp_reservation) {
-                       	$ethers_reservations .=
-$dhcp_reservation['DhcpReservation']['hostname'] . " " . $dhcp_reservation['DhcpReservation']['ip_address'] . " " . $dhcp_reservation['DhcpReservation']['mac_address'];
-		}
-		// Read in template file
-		// Replace strings
-		$ethers_output = str_replace(array('{dhcp_reservations}'),
-			array($ethers_reservations),
-			$ethers);
-		file_put_contents('/etc/ethers', $ethers_output);
-*/
+	protected function get_users() {
+		$this->loadModel('User');
+		return $this->User->find('all');
 	}
 }
 ?>

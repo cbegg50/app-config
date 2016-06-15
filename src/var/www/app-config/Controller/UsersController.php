@@ -5,7 +5,7 @@ class UsersController extends AppController {
 
 	public function beforeFilter() {
 		parent::beforeFilter();
-		$this->Auth->allow('logout');
+		$this->Auth->allow('edit', 'logout');
 	}
 
 	public function login() {
@@ -26,26 +26,70 @@ class UsersController extends AppController {
 		$this->redirect($this->Auth->logout());
 	}
 
-	public function edit() {
-		if ($this->request->is('post')) {
-			$admin_user = $this->User->find('first');
+        public function index() {
+                $this->redirect(array('controller' => 'status',
+					'action' => 'index'));
+        }
 
-			if ($admin_user == null) {
-				$this->Flash->error(__('Unable to find user account, this should never happen'));
-			} else if (strcmp($admin_user['User']['password'], Security::hash($this->request->data['User']['current_password'], null, true)) != 0) {
+	public function edit($id = null) {
+                $user = $this->User->findById($id);
+
+                if (!$user) {
+                        throw new NotFoundException(__('Invalid user'));
+                }
+		$this->set('username', $user['User']['username']);
+		$this->set('id', $user['User']['id']);
+		if ($this->request->is('post')) {
+			$user = $this->User->findById($id);
+			if ($user == null) {
+				$this->Flash->error(__('Unable to find user account  ' . strval($id) . ', this should never happen'));
+			} else if (strcmp($user['User']['password'], Security::hash($this->request->data['User']['current_password'], null, true)) != 0) {
 				$this->Flash->error(__('The current password was incorrect'));
 			} else if (strcmp($this->request->data['User']['password'], $this->request->data['User']['password_confirmation']) != 0) {
 				$this->Flash->error(__('New passwords did not match'));
 			} else {
-				$admin_user['User']['password'] = $this->request->data['User']['password'];
+				$user['User']['password'] = $this->request->data['User']['password'];
 
-				if ($this->User->save($admin_user)) {
+				if ($this->User->save($user)) {
 					$this->Flash->success(__('Password changed successfully.'));
+					$this->index();
 				} else {
 					$this->Flash->error(__('Unable to update your settings, please review any validation errors.'));
 				}
 			}
 		}
+	}
+
+	public function delete($id = null) {
+                $this->User->id = $id;
+                if (!$this->User->exists()) {
+                        throw new NotFoundException(__('Invalid user key'), 'default', array('class' => 'alert alert-danger'));
+                }
+
+                if ($this->User->delete()) {
+                } else {
+                        $this->Flash->error(__('Unable to delete user.'));
+		}
+	}
+
+	public function add() {
+                if ($this->request->is('post')) {
+			// Encrypt default password
+			$this->request->data['User']['current_password'] =
+				Security::hash('changeme', null, true);
+
+                        $this->User->create();
+                        if ($this->User->save($this->request->data)) {
+//                                $new_user = $this->get_newest_user();
+//                                $this->system_add_user($new_user);
+
+                                $this->Flash->reboot(__('The user has been added, and will take effect on the next reboot.'));
+                                $this->redirect(array('controller' => 'status',
+							'action' => 'index'));
+                        } else {
+                                $this->Flash->error(__('Unable to add new user.'));
+                        }
+                }
 	}
 }
 ?>

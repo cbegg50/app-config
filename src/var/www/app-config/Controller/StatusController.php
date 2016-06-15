@@ -4,12 +4,14 @@ class StatusController extends AppController {
 
 	public function beforeFilter() {
 		parent::beforeFilter();
-		$this->Auth->allow('index');
+		$this->Auth->allow('index', 'edit');
 	}
 
 
-	public function index($id = 0) {
+	public function index() {
 		$this->load_email_attributes();
+		$this->set('users', $this->get_users());
+		// Check hostname and domain
                 $current_hostname = file_get_contents("/etc/hostname");
                 $this->set('current_hostname', $current_hostname);
                 $dnsmasq = file_get_contents("/etc/dnsmasq.d/hsmm-pi.conf");
@@ -36,6 +38,7 @@ class StatusController extends AppController {
 	}
 
         private function render_email_config($email_setting) {
+		// Render /etc/postfix/main.cf
                 $postfix_conf = file_get_contents(WWW_ROOT . "/files/main.cf.template");
                 $postfix_conf_output = str_replace(array('{myhostname}', '{mydomain}'),
 						array($email_setting['EmailSetting']['hostname'],
@@ -43,6 +46,16 @@ class StatusController extends AppController {
 						$postfix_conf);
 
                 file_put_contents('/etc/postfix/main.cf', $postfix_conf_output);
+		// Render /etc/postfix/helo_access
+                $postfix_conf = file_get_contents(WWW_ROOT . "/files/helo_access.template");
+                $postfix_conf_output = str_replace(array('{myhostname}', '{mydomain}'),
+						array($email_setting['EmailSetting']['hostname'],
+							$email_setting['EmailSetting']['domain']), 
+						$postfix_conf);
+
+                file_put_contents('/etc/postfix/helo_access', $postfix_conf_output);
+		exec('sudo postmap /etc/postfix/helo_access');
+		exec('sudo service postfix restart');
         }
 
 	function startsWith($haystack, $needle) {

@@ -71,14 +71,9 @@ class AppSchema extends CakeSchema {
 		'wan_protocol' => array('type' => 'string', 'null' => false, 'default' => 'DHCP'),
 		'wan_dns1' => array('type' => 'string', 'null' => true, 'default' => '8.8.8.8'),
 		'wan_dns2' => array('type' => 'string', 'null' => true, 'default' => '8.8.4.4'),
-		'wan_mesh_gateway' => array('type' => 'boolean', 'null' => false, 'default' => false),
-		'mesh_olsrd_secure' => array('type' => 'boolean', 'null' => false, 'default' => false),
-		'mesh_olsrd_secure_key' => array('type' => 'string', 'null' => true),
-		'node_name' => array('type' => 'string', 'null' => false, 'default' => 'UNDEF-1'),
 		'wifi_adapter_name' => array('type' => 'string', 'null' => false, 'default' => 'wlan0'),
 		'wired_adapter_name' => array('type' => 'string', 'null' => false, 'default' => 'eth0'),
 		'wan_fixed_connection' => array('type' => 'boolean', 'null' => false, 'default' => false),
-		'ntp_server' => array('type' => 'string', 'null' => false, 'default' => 'ntp.ubuntu.com'),
 		'indexes' => array(
 			'PRIMARY' => array('column' => 'id', 'unique' => true)
 		),
@@ -98,8 +93,8 @@ class AppSchema extends CakeSchema {
 	public $users = array(
 		'id' => array('type' => 'integer', 'null' => false, 'length' => 11, 'key' => 'primary'),
 		'username' => array('type' => 'string', 'null' => false, 'length' => 50),
-		'password' => array('type' => 'string', 'null' => false, 'length' => 50),
-		'role' => array('type' => 'string', 'null' => true, 'length' => 20),
+		'password' => array('type' => 'string', 'null' => false, 'length' => 50, 'default' => 'changeme'),
+		'role' => array('type' => 'string', 'null' => true, 'length' => 20, 'default' => 'author'),
 		'has_email' => array('type' => 'boolean', 'null' => false, 'default' => true),
 		'created' => array('type' => 'datetime', 'null' => true, 'default' => null),
 		'modified' => array('type' => 'datetime', 'null' => true, 'default' => null),

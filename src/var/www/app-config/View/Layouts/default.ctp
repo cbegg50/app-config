@@ -155,12 +155,12 @@ $cakeDescription = __d('cake_dev', __('app-config'));
                                      array('escape' => false));
              ?>
           </li>
-          <li <?php if (strstr($this->here, '/app-config/user') != FALSE) { echo 'class="active"'; }  ?>>
+          <li <?php if (strstr($this->here, '/app-config/users') != FALSE) { echo 'class="active"'; }  ?>>
             <?php
               echo $this->Html->link("<i class=\"glyphicon glyphicon-user\"></i>&nbsp;".__('Accounts'),
                                     array(
                                           'controller' => 'users',
-                                          'action' => 'edit'),
+                                          'action' => 'index'),
                                     array('escape' => false));
             ?>
           </li>

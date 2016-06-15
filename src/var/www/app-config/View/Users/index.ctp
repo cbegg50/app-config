@@ -1,4 +1,4 @@
-<!-- File: /app/View/Status/index.ctp -->
+<!-- File: /app/View/Users/index.ctp -->
 
 <script>
     $( document ).on("click", ".open-mapModal", function () {
@@ -21,38 +21,11 @@
 </script>
 
 <div class="page-header">
-  <h1>App Status&nbsp;
+  <h1>Users Status&nbsp;
       <small><?php echo $node_name;?>
 </small></h1>
 </div>
 
-<div class="row">
-  <div class="col-md-8">
-    <div class="well">
-      <h3>Apps</h3>
-
-      <table class="table table-striped table-bordered">
-  <tr>
-    <th>Email Server</th>
-    <td><?php echo $hostname . '.' . $domain ; ?>
-    </td>
-  </tr>
-  <tr>
-    <th>IRC</th>
-    <td></td>
-  </tr>
-  <tr>
-    <th>ownCloud</th>
-    <td></td>
-  </tr>
-  <tr>
-    <th>Asterisk</th>
-    <td></td>
-  </tr>
-      </table>
-    </div>
-
-</div>
 <div class="row">
   <div class="col-md-8">
       <h3>Users</h3>
@@ -62,12 +35,42 @@ if ($users != NULL && sizeof($users) > 0) {
       <table class="table table-striped table-bordered">
         <tr>
           <th>Name</th>
+          <th>Actions</th>
         </tr>
         <?php
 foreach ($users as $user) {
                 ?>
         <tr>
           <td><?php echo $user['User']['username'];?></td>
+          <td>
+                <?php
+if ($user_id != NULL) {
+	if (($user_id == 1) || ($user_id == $user['User']['id']))
+	echo $this->Html->link('', array(
+			'controller' => 'users',
+                        'action' => 'edit',
+                        $user['User']['id'],
+        	),
+                array('class' => 'glyphicon glyphicon-edit'));
+		echo '&emsp;';
+	if  ($user_id == 1) {
+		if  ($user['User']['id'] == 1) {
+			echo $this->Html->link('', array(
+				'controller' => 'users',
+	                        'action' => 'add',
+	                	),
+	                        array('class' => 'glyphicon glyphicon-plus'));
+		} else {
+			echo $this->Html->link('', array(
+				'controller' => 'users',
+	                        'action' => 'delete',
+	                        $user['User']['id'],
+	                ),
+	                        array('class' => 'glyphicon glyphicon-trash'));
+		}
+	}
+}
+                ?>
           </td>
         </tr>
         <?php
