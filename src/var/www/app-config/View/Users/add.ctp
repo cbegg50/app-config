@@ -1,6 +1,7 @@
+
 <!-- File: /app/View/Users/add.ctp -->
 <div class="page-header">
-  <h1>Change Password</h1>
+  <h1>Add User</h1>
 </div>
 
 <?php

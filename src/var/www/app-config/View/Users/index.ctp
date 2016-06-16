@@ -62,7 +62,6 @@ if ($user_id != NULL) {
 	                        array('class' => 'glyphicon glyphicon-plus'));
 		} else {
 			echo $this->Html->link('', array(
-				'controller' => 'users',
 	                        'action' => 'delete',
 	                        $user['User']['id'],
 	                ),

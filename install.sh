@@ -91,6 +91,8 @@ sudo chmod -R 775 tmp
 EMAILPATH=/etc/postfix/main.cf
 sudo touch "$EMAILPATH"
 sudo chmod 644 "$EMAILPATH"
+sudo touch /etc/postfix/helo_access
+sudo chmod 644 /etc/postfix/helo_access
 sudo maildirmake.dovecot /etc/skel/Maildir
 sudo maildirmake.dovecot /etc/skel/Maildir/.Drafts
 sudo maildirmake.dovecot /etc/skel/Maildir/.Sent

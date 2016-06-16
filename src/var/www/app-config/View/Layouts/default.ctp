@@ -137,7 +137,7 @@ $cakeDescription = __d('cake_dev', __('app-config'));
                                      array('escape' => false));
             ?>
           </li>
-          <li <?php if (strstr($this->here, '/hsmm-pi/network_services') != FALSE) { echo 'class="active"'; }  ?>>
+          <li <?php if (strstr($this->here, '/app-config/network_services') != FALSE) { echo 'class="active"'; }  ?>>
             <?php
               echo $this->Html->link("<i class=\"glyphicon glyphicon-bullhorn\"></i>&nbsp;".__('Services'),
                                      array(
@@ -146,7 +146,7 @@ $cakeDescription = __d('cake_dev', __('app-config'));
                                      array('escape' => false));
             ?>
           </li>
-          <li <?php if (strstr($this->here, '/hsmm-pi/location') != FALSE) { echo 'class="active"'; }  ?>>
+          <li <?php if (strstr($this->here, '/aoo-config/location') != FALSE) { echo 'class="active"'; }  ?>>
             <?php
               echo $this->Html->link("<i class=\"glyphicon glyphicon-globe\"></i>&nbsp;".__('Location'),
                                      array(
@@ -155,7 +155,7 @@ $cakeDescription = __d('cake_dev', __('app-config'));
                                      array('escape' => false));
              ?>
           </li>
-          <li <?php if (strstr($this->here, '/app-config/users') != FALSE) { echo 'class="active"'; }  ?>>
+          <li <?php if (strstr($this->here, '/app-config/user') != FALSE) { echo 'class="active"'; }  ?>>
             <?php
               echo $this->Html->link("<i class=\"glyphicon glyphicon-user\"></i>&nbsp;".__('Accounts'),
                                     array(
