@@ -1,3 +1,4 @@
+
 # ircd-hybrid configuration file [ircd.conf]
 # customized for Debian by Joshua Kwan <joshk@triplehelix.org>
 # modified for Debian by Aurélien GÉRÔME <ag@roxor.cx>
@@ -5,12 +6,12 @@
  /* serverinfo {}:  Contains information about the server. (OLD M:) */
 serverinfo {
 	/* name: the name of our server */
-	name = "cn-server";
+	name = {server};
 
 	/* description: the description of our server.  '[' and ']' may not
 	 * be used here for compatibility with older servers.
 	 */
-	description = "cn-desc";
+	description = {short_desc};
 
 	/* network info: the name and description of the network this server
 	 * is on.  Shown in the 005 reply and used with serverhiding.

@@ -29,8 +29,6 @@ class UsersController extends AppController {
         public function index() {
                 $this->load_email_attributes();
  		$this->set('users', $this->get_users());
-		$this->Flash->error(__('In UsersController/index.'));
-		$this->redirect(array('controller' => 'users', 'action' => 'index'));
         }
 
 	public function edit($id = null) {
@@ -71,7 +69,7 @@ class UsersController extends AppController {
                         throw new NotFoundException(__('Invalid user key'), 'default', array('class' => 'alert alert-danger'));
                 }
                 $user = $this->User->findById($id);
-		$username = $user['User']['username'];;
+		$username = $user['User']['username'];
                 if ($this->User->delete()) {
 			$this->systemDelUser($username);
 			$this->redirect(array('action' => 'index'));
@@ -103,6 +101,7 @@ class UsersController extends AppController {
 			}
                 }
 	}
+
 	private function systemAddUser($username) {
 		exec("bash <<'END'
 sudo adduser " . $username . "
@@ -122,6 +121,7 @@ END
                        	$this->Flash->error(__('Error: ' . implode(':', $output) . ' ' . $result ));
 		}
 	}
+
 	private function systemDelUser($username) {
 		exec('sudo deluser ' . $username . ' 2>&1', $output, $result);
 		if ($result == 0) {
@@ -130,6 +130,7 @@ END
                        	$this->Flash->error(__('Error: ' . implode(':', $output) . ' ' . $result ));
 		}
 	}
+
 	private function systemUpdatePassword($username, $password) {
 		exec("bash <<'END'
 sudo passwd " . $username . "

@@ -31,19 +31,9 @@ class AppController extends Controller {
 		'Auth' => array('loginRedirect' => array('controller' => 'status',
 			'action' => 'index'),
 			'logoutRedirect' => array('controller' => 'status',
-				'action' => 'index'),
-			'authorize' => array('Controller')
+				'action' => 'index')
 			)
 		);
-
-	public function isAuthorized($user) {
-		// admin can access every action
-		if (isset($user['role']) && $user['role'] === 'admin') {
-			return true;
-		}
-		// Default deny
-		return false;
-	}
 
 	protected function load_email_attributes() {
 		$this->loadModel('EmailSetting');
@@ -62,5 +52,41 @@ class AppController extends Controller {
 		$this->loadModel('User');
 		return $this->User->find('all');
 	}
+
+        protected function render_email_config($email_setting) {
+                // Render /etc/postfix/main.cf
+                $postfix_conf = file_get_contents(WWW_ROOT . "/files/main.cf.template");
+                $postfix_conf_output = str_replace(array('{myhostname}', '{mydomain}'),
+                                                array($email_setting['EmailSetting']['hostname'],
+                                                        $email_setting['EmailSetting']['domain']),
+                                                $postfix_conf);
+
+                file_put_contents('/etc/postfix/main.cf', $postfix_conf_output);
+                // Render /etc/postfix/helo_access
+                $postfix_conf = file_get_contents(WWW_ROOT . "/files/helo_access.template");
+                $postfix_conf_output = str_replace(array('{myhostname}', '{mydomain}'),
+                                                array($email_setting['EmailSetting']['hostname'],
+                                                        $email_setting['EmailSetting']['domain']),
+                                                $postfix_conf);
+
+                file_put_contents('/etc/postfix/helo_access', $postfix_conf_output);
+                exec('sudo postmap /etc/postfix/helo_access');
+                exec('sudo service postfix restart');
+        }
+
+        protected function render_ircd_config($email_setting) {
+                // Render /etc/postfix/main.cf
+                $ircd_conf = file_get_contents(WWW_ROOT . "/files/ircd-hybrid/ircd.conf.template");
+		$ircd_server = $email_setting['EmailSetting']['hostname'] . '.' . $email_setting['EmailSetting']['domain'];
+		$ircd_desc = "Dummy IRC Server Description";
+                $ircd_conf_output = str_replace(array('{ircd_server}', '{short_desc}'),
+                                                array($ircd_server, $ircd_desc),
+                                                $ircd_conf);
+
+                file_put_contents('/etc/ircd-hybrid/ircd.conf', $ircd_conf_output);
+                exec('sudo service ircd restart');
+        }
+
+
 }
 ?>

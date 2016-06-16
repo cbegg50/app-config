@@ -31,7 +31,8 @@ sudo apt-get install -y \
     postfix \
     dovecot-common \
     dovecot-imapd \
-    squirrelmail
+    squirrelmail \
+    ircd-hybrid
 
 # Enabe php5-mcrypt
 sudo php5enmod mcrypt
@@ -100,8 +101,13 @@ sudo maildirmake.dovecot /etc/skel/Maildir/.Spam
 sudo maildirmake.dovecot /etc/skel/Maildir/.Trash
 sudo maildirmake.dovecot /etc/skel/Maildir/.Templates
 
+IRCDPATH=/etc/ircd-hybrid/ircd.conf
+sudo touch "$IRCDPATH"
+sudo chown irc "$IRCDPATH"
+sudo chgrp irc "$IRCDPATH"
+
 # Set permissions on system files to give www-data group write priv's
-for file in /etc/postfix/main.cf /etc/postfix/helo_access; do
+for file in /etc/postfix/main.cf /etc/postfix/helo_access /etc/ircd-hybrid/ircd.conf; do
     sudo chgrp www-data ${file}
     sudo chmod g+w ${file}
 done

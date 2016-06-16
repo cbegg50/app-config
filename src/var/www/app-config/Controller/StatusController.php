@@ -37,27 +37,6 @@ class StatusController extends AppController {
 		}
 	}
 
-        private function render_email_config($email_setting) {
-		// Render /etc/postfix/main.cf
-                $postfix_conf = file_get_contents(WWW_ROOT . "/files/main.cf.template");
-                $postfix_conf_output = str_replace(array('{myhostname}', '{mydomain}'),
-						array($email_setting['EmailSetting']['hostname'],
-							$email_setting['EmailSetting']['domain']), 
-						$postfix_conf);
-
-                file_put_contents('/etc/postfix/main.cf', $postfix_conf_output);
-		// Render /etc/postfix/helo_access
-                $postfix_conf = file_get_contents(WWW_ROOT . "/files/helo_access.template");
-                $postfix_conf_output = str_replace(array('{myhostname}', '{mydomain}'),
-						array($email_setting['EmailSetting']['hostname'],
-							$email_setting['EmailSetting']['domain']), 
-						$postfix_conf);
-
-                file_put_contents('/etc/postfix/helo_access', $postfix_conf_output);
-		exec('sudo postmap /etc/postfix/helo_access');
-		exec('sudo service postfix restart');
-        }
-
 	function startsWith($haystack, $needle) {
 		return !strncmp($haystack, $needle, strlen($needle));
 	}
