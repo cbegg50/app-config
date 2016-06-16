@@ -14,6 +14,11 @@ class AppSchema extends CakeSchema {
 
 		if (isset($event['create'])) {
 			switch ($event['create']) {
+                                case 'irc_settings':
+                                        $irc_setting = ClassRegistry::init('IrcSetting');
+                                        $irc_setting->create();
+                                        $irc_setting->save();
+                                        break;
 				case 'network_settings':
 					$network_setting = ClassRegistry::init('NetworkSetting');
 					$network_setting->create();
@@ -48,6 +53,18 @@ class AppSchema extends CakeSchema {
 			}
 		}
 	}
+
+        public $irc_settings = array(
+                'id' => array('type' => 'integer', 'null' => false, 'length' => 11, 'key' => 'primary'),
+                'ircd_server' => array('type' => 'string', 'null' => false),
+                'short_desc' => array('type' => 'string', 'null' => false, 'default' => 'null'),
+                'net_name' => array('type' => 'integer', 'null' => false),
+                'net_desc' => array('type' => 'string', 'null' => false, 'default' => ''),
+                'indexes' => array(
+                        'PRIMARY' => array('column' => 'id', 'unique' => true)
+		),
+		'tableParameters' => array()
+	);
 
 	public $network_settings = array(
 		'id' => array('type' => 'integer', 'null' => false, 'length' => 11, 'key' => 'primary'),

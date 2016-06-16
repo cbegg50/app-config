@@ -146,11 +146,11 @@ $cakeDescription = __d('cake_dev', __('app-config'));
                                      array('escape' => false));
             ?>
           </li>
-          <li <?php if (strstr($this->here, '/aoo-config/location') != FALSE) { echo 'class="active"'; }  ?>>
+          <li <?php if (strstr($this->here, '/aoo-config/irc_settings') != FALSE) { echo 'class="active"'; }  ?>>
             <?php
-              echo $this->Html->link("<i class=\"glyphicon glyphicon-globe\"></i>&nbsp;".__('Location'),
+              echo $this->Html->link("<i class=\"glyphicon glyphicon-globe\"></i>&nbsp;".__('IRC'),
                                      array(
-                                           'controller' => 'location_settings',
+                                           'controller' => 'irc_settings',
                                            'action' => 'edit/1'),
                                      array('escape' => false));
              ?>
