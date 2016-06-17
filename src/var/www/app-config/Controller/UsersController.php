@@ -27,8 +27,8 @@ class UsersController extends AppController {
 	}
 
         public function index() {
-                $this->load_email_attributes();
- 		$this->set('users', $this->get_users());
+                $this->loadEmailAttributes();
+ 		$this->set('users', $this->getUsers());
         }
 
 	public function edit($id = null) {
@@ -40,11 +40,12 @@ class UsersController extends AppController {
 		$username = $user['User']['username'];
 		$this->set('username', $username);
 		$this->set('id', $user['User']['id']);
-		if ($this->request->is('post')) {
-			$user = $this->User->findById($id);
+                $this->set('logged_id', AuthComponent::user('id'));
+ 		if ($this->request->is('post')) {
 			if ($user == null) {
 				$this->Flash->error(__('Unable to find user account  ' . $id . ', this should never happen'));
-			} else if (strcmp($user['User']['password'], Security::hash($this->request->data['User']['current_password'], null, true)) != 0) {
+			} else if (( $user['User']['id'] == AuthComponent::user('id')) &&
+				   (strcmp($user['User']['password'], Security::hash($this->request->data['User']['current_password'], null, true)) != 0)) {
 				$this->Flash->error(__('The current password was incorrect'));
 			} else if (strcmp($this->request->data['User']['password'], $this->request->data['User']['password_confirmation']) != 0) {
 				$this->Flash->error(__('New passwords did not match'));

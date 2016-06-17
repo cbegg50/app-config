@@ -56,10 +56,10 @@ class AppSchema extends CakeSchema {
 
         public $irc_settings = array(
                 'id' => array('type' => 'integer', 'null' => false, 'length' => 11, 'key' => 'primary'),
-                'ircd_server' => array('type' => 'string', 'null' => false),
+                'ircd_server' => array('type' => 'string', 'null' => false, 'default' => ''),
                 'short_desc' => array('type' => 'string', 'null' => false, 'default' => 'null'),
-                'net_name' => array('type' => 'integer', 'null' => false),
-                'net_desc' => array('type' => 'string', 'null' => false, 'default' => ''),
+                'net_name' => array('type' => 'string', 'null' => false, 'default' => ''),
+                'net_desc' => array('type' => 'string', 'null' => false, 'default' => 'null'),
                 'indexes' => array(
                         'PRIMARY' => array('column' => 'id', 'unique' => true)
 		),

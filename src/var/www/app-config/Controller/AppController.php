@@ -35,7 +35,7 @@ class AppController extends Controller {
 			)
 		);
 
-	protected function load_email_attributes() {
+	protected function loadEmailAttributes() {
 		$this->loadModel('EmailSetting');
 		$settings = $this->EmailSetting->findById(1);
 		$this->set('user_id', AuthComponent::user('id'));
@@ -43,17 +43,22 @@ class AppController extends Controller {
 		$this->set('domain', $settings['EmailSetting']['domain']);
 	}
 
-	protected function get_email_settings() {
+	protected function getEmailSettings() {
 		$this->loadModel('EmailSetting');
 		return $this->EmailSetting->findById(1);
 	}
 
-	protected function get_users() {
+	protected function getIrcSettings() {
+		$this->loadModel('IrcSetting');
+		return $this->IrcSetting->findById(1);
+	}
+
+	protected function getUsers() {
 		$this->loadModel('User');
 		return $this->User->find('all');
 	}
 
-        protected function render_email_config($email_setting) {
+        protected function renderEmailConfig($email_setting) {
                 // Render /etc/postfix/main.cf
                 $postfix_conf = file_get_contents(WWW_ROOT . "/files/main.cf.template");
                 $postfix_conf_output = str_replace(array('{myhostname}', '{mydomain}'),
@@ -70,21 +75,37 @@ class AppController extends Controller {
                                                 $postfix_conf);
 
                 file_put_contents('/etc/postfix/helo_access', $postfix_conf_output);
-                exec('sudo postmap /etc/postfix/helo_access');
-                exec('sudo service postfix restart');
+		$output = '';
+		$result = 0;
+                exec('sudo postmap /etc/postfix/helo_access 2>&1', $output, $result);
+		if ($result != 0) {
+			$this->Flash->error(__('postmap failed:' . implode(':', $output)));
+                }
+		exec('sudo service postfix restart 2>&1', $output ,$result);
+		if ($result != 0) {
+			$this->Flash->error(__('Failed to restart postfix:' . implode(':', $output)));
+		}
+		return $result;
         }
 
-        protected function render_ircd_config($email_setting) {
+        protected function renderIrcdConfig($settings) {
                 // Render /etc/postfix/main.cf
                 $ircd_conf = file_get_contents(WWW_ROOT . "/files/ircd-hybrid/ircd.conf.template");
-		$ircd_server = $email_setting['EmailSetting']['hostname'] . '.' . $email_setting['EmailSetting']['domain'];
-		$ircd_desc = "Dummy IRC Server Description";
-                $ircd_conf_output = str_replace(array('{ircd_server}', '{short_desc}'),
-                                                array($ircd_server, $ircd_desc),
+                $ircd_conf_output = str_replace(array('{ircd_server}', '{short_desc}', '{net_name}', '{net_desc}'),
+                                                array($settings['IrcSetting']['ircd_server'],
+							$settings['IrcSetting']['short_desc'],
+							$settings['IrcSetting']['net_name'],
+							$settings['IrcSetting']['net_desc']),
                                                 $ircd_conf);
 
                 file_put_contents('/etc/ircd-hybrid/ircd.conf', $ircd_conf_output);
-                exec('sudo service ircd restart');
+		$output = '';
+		$result = -1;
+                exec('sudo service ircd-hybrid restart 2>&1', $output, $result);
+		if ($result != 0) {
+			$this->Flash->error(__('Failed to restart ircd:' . implode(':', $output)));
+		}
+		return $result;
         }
 
 

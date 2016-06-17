@@ -11,7 +11,9 @@ echo $this->Form->create('User', array(
     'class' => 'form-control'),
   'url' => array('controller' => 'users', 'action' => 'edit', $id)));
 echo $this->Form->input('id', array('type' => 'hidden'));
-echo $this->Form->input('current_password', array('label' => __('Current Password'), 'type' => 'password'));
+if ($logged_id == $id) {
+	echo $this->Form->input('current_password', array('label' => __('Current Password'), 'type' => 'password'));
+}
 echo $this->Form->input('password', array('label' => __('New Password'), 'type' => 'password'));
 echo $this->Form->input('password_confirmation', array('label' => __('New Password (again)'), 'type' => 'password'));
 

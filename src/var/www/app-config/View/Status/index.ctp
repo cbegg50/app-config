@@ -39,7 +39,10 @@
   </tr>
   <tr>
     <th>IRC</th>
-    <td></td>
+    <td><?php echo $irc_settings['IrcSetting']['ircd_server']; ?></td>
+    <td><?php echo $irc_settings['IrcSetting']['short_desc']; ?></td>
+    <td><?php echo $irc_settings['IrcSetting']['net_name']; ?></td>
+    <td><?php echo $irc_settings['IrcSetting']['net_desc']; ?></td>
   </tr>
   <tr>
     <th>ownCloud</th>

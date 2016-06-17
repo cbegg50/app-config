@@ -1,5 +1,5 @@
 <?php
-class LocationSetting extends AppModel {
+class IrcSetting extends AppModel {
 
 	public $validate = array(
 		'ircd_server' => array('required' => array('rule' => array('notBlank'), 'message' => 'The server domain name.')),

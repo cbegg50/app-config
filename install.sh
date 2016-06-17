@@ -120,6 +120,15 @@ if [ ! -e /var/data/app-config/app-config.sqlite ]; then
     sudo chown root.www-data /var/data/app-config/app-config.sqlite
     sudo chmod 664 /var/data/app-config/app-config.sqlite
 fi
+
+# Check if our sudo commands have been enabled for www-data
+OUTPUT=`sudo grep "www-data ALL=(ALL) NOPASSWD: /usr/sbin/adduser" /etc/sudoers`
+if [ -z "$OUTPUT" ]; then
+ sudo bash -c "echo 'www-data ALL=(ALL) NOPASSWD: /usr/sbin/adduser' >> /etc/sudoers"
+ sudo bash -c "echo 'www-data ALL=(ALL) NOPASSWD: /usr/sbin/deluser' >> /etc/sudoers"
+ sudo bash -c "echo 'www-data ALL=(ALL) NOPASSWD: /usr/bin/passwd' >> /etc/sudoers"
+ sudo bash -c "echo 'www-data ALL=(ALL) NOPASSWD: /usr/sbin/service' >> /etc/sudoers"
+fi
 # enable apache mod-rewrite and ssl
 sudo a2enmod rewrite
 sudo a2enmod ssl
