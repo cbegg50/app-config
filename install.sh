@@ -62,8 +62,6 @@ fi
 if [ ! -d app-config ]; then
     sudo ln -s ${PROJECT_HOME}/src/var/www/app-config
 fi
-sudo rm -f index.html
-sudo ln -s ${PROJECT_HOME}/src/var/www/index.html
 
 cd ${PROJECT_HOME}
 php -r "copy('https://getcomposer.org/installer', 'composer-setup.php');"

@@ -24,8 +24,6 @@ if [ -d /var/www/html ]; then
 else
     cd /var/www
 fi
-sudo rm -f index.html
-sudo ln -s ${PROJECT_HOME}/src/var/www/index.html
 
 cd ${PROJECT_HOME}/src/var/www/app-config
 # Remove cache files
