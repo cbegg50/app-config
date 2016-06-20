@@ -126,9 +126,16 @@ END
 	private function systemDelUser($username) {
 		exec('sudo deluser ' . $username . ' 2>&1', $output, $result);
 		if ($result == 0) {
-                        $this->Flash->success(__('User ' . $username . ' successfully deleted.'));
+			$command = 'sudo rm -rf /home/' . $username . ' 2>&1';
+			exec($command, $output, $result);
+//			exec('sudo rm -rf /home/' . $username . ' 2>&1', $output, $result);
+			if ($result == 0) {
+	                        $this->Flash->success(__('User ' . $username . ' successfully deleted.'));
+			} else {
+				$this->Flash->error(__($command . 'rm error: ' . implode(':', $otuput) . ' ' . $result));
+			}
 		} else {
-                       	$this->Flash->error(__('Error: ' . implode(':', $output) . ' ' . $result ));
+                       	$this->Flash->error(__('deluser error: ' . implode(':', $output) . ' ' . $result ));
 		}
 	}
 

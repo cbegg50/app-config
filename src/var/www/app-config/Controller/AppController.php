@@ -1,4 +1,5 @@
 
+
 <?php
 /**
  * Application level Controller
@@ -60,7 +61,7 @@ class AppController extends Controller {
 
         protected function renderEmailConfig($email_setting) {
                 // Render /etc/postfix/main.cf
-                $postfix_conf = file_get_contents(WWW_ROOT . "/files/main.cf.template");
+                $postfix_conf = file_get_contents(WWW_ROOT . "/files/postfix/main.cf.template");
                 $postfix_conf_output = str_replace(array('{myhostname}', '{mydomain}'),
                                                 array($email_setting['EmailSetting']['hostname'],
                                                         $email_setting['EmailSetting']['domain']),
@@ -68,7 +69,7 @@ class AppController extends Controller {
 
                 file_put_contents('/etc/postfix/main.cf', $postfix_conf_output);
                 // Render /etc/postfix/helo_access
-                $postfix_conf = file_get_contents(WWW_ROOT . "/files/helo_access.template");
+                $postfix_conf = file_get_contents(WWW_ROOT . "/files/postfix/helo_access.template");
                 $postfix_conf_output = str_replace(array('{myhostname}', '{mydomain}'),
                                                 array($email_setting['EmailSetting']['hostname'],
                                                         $email_setting['EmailSetting']['domain']),

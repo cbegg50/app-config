@@ -13,7 +13,7 @@ class StatusController extends AppController {
 		$this->set('irc_settings', $this->getIrcSettings());
 		$this->set('users', $this->getUsers());
 		// Check hostname and domain
-                $current_hostname = file_get_contents("/etc/hostname");
+                $current_hostname = trim(file_get_contents("/etc/hostname"));
                 $this->set('current_hostname', $current_hostname);
                 $dnsmasq = file_get_contents("/etc/dnsmasq.d/hsmm-pi.conf");
                 $current_domain = strstr($dnsmasq, "domain=");  // includes rest of file
@@ -30,14 +30,14 @@ class StatusController extends AppController {
 	'id' => 1,
         'hostname' => $current_hostname,
         'domain' => $current_domain))) {
-				$this->renderEmailConfig($this->get_email_settings());
+				$this->renderEmailConfig($this->getEmailSettings());
 				exec('sudo /usr/sbin/service postfix reload');
 				exec('sudo /usr/sbin/service dovecot reload');
 			}
 	                if ($this->IrcSetting->save(array(
 	'id' => 1,
         'ircd_server' => $current_hostname . '.' . $current_domain))) {
-				$this->renderIrcdConfig($this->get_irc_settings());
+				$this->renderIrcdConfig($this->getIrcSettings());
 				exec('sudo /usr/sbin/service ircd reload');
 			}
 			$this->redirect(array('action' => 'index'));

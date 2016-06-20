@@ -127,7 +127,9 @@ if [ -z "$OUTPUT" ]; then
  sudo bash -c "echo 'www-data ALL=(ALL) NOPASSWD: /usr/sbin/adduser' >> /etc/sudoers"
  sudo bash -c "echo 'www-data ALL=(ALL) NOPASSWD: /usr/sbin/deluser' >> /etc/sudoers"
  sudo bash -c "echo 'www-data ALL=(ALL) NOPASSWD: /usr/bin/passwd' >> /etc/sudoers"
+ sudo bash -c "echo 'www-data ALL=(ALL) NOPASSWD: /bin/rm' >> /etc/sudoers"
  sudo bash -c "echo 'www-data ALL=(ALL) NOPASSWD: /usr/sbin/service' >> /etc/sudoers"
+ sudo bash -c "echo 'www-data ALL=(ALL) NOPASSWD: /usr/sbin/postmap' >> /etc/sudoers"
 fi
 # enable apache mod-rewrite and ssl
 sudo a2enmod rewrite
